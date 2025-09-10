@@ -10,7 +10,7 @@ class Program
 
         while (true)
         {
-            Console.WriteLine("Haluatko lisätä henkilön (H) vai lemmikin (L) Vai lopettaa (X)?");
+            Console.WriteLine("Haluatko lisätä henkilön (H), lemmikin (L), näytä puhelinnumero (N) vai lopettaa (X)?");
             string? input = Console.ReadLine();
             string vastaus = input.ToUpper();
 
@@ -24,6 +24,28 @@ class Program
                 taulut.LisaaHenkilo(nimi, puhelin);
 
                 Console.WriteLine("Henkilö lisätty onnistuneesti!");
+
+                while (true)
+                {
+                    Console.WriteLine("haluatko päivittää henkilön puhelin numeron? (K/E)");
+                    string? vastaus2 = Console.ReadLine().ToUpper();
+                    if (vastaus2 == "K")
+                    {
+                        Console.WriteLine("Anna henkilön uusi puhelin numero:");
+                        int uusiPuhelin = Convert.ToInt32(Console.ReadLine());
+                        taulut.PaivitaHenkilonPuhelin(nimi, puhelin, uusiPuhelin);
+                        Console.WriteLine("Henkilön puhelin numero päivitetty onnistuneesti!");
+                        break;
+                    }
+                    else if (vastaus2 == "E")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
             }
             else if (vastaus == "L")
             {
@@ -39,14 +61,19 @@ class Program
                 Console.WriteLine("Lemmikki lisätty onnistuneesti!");
 
             }
+            else if (vastaus == "N")
+            {
+                Console.WriteLine("Anna lemmikin nimi:");
+                string? nimi = Console.ReadLine();
+                taulut.NaytaPuhelin(nimi);
+            }
             else if (vastaus == "X")
             {
-                Console.WriteLine("Heippa 😊");
                 break;
             }
             else
             {
-                Console.WriteLine("Väärä syöte. Yritä uudelleen.");
+                Console.WriteLine("Virheellinen syöte, yritä uudelleen.");
             }
         }
     }

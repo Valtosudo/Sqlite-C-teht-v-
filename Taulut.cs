@@ -4,29 +4,33 @@ using Microsoft.Data.Sqlite;
 
 public class Taulut
 {
-    private string _connectionString = "Data Source = HenkilotJaLemmikit.db";
+    private string _connectionString = "Data Source = Lemmikki.db";
 
     public Taulut()
     {
-        var connection = new SqliteConnection(_connectionString);
-        connection.Open();
-        var command = connection.CreateCommand();
-        command.CommandText = @"CREATE TABLE IF NOT EXISTS Henkilot (id INTEGER PRIMARY KEY, Nimi TEXT, Puhelin INTEGER);";
-        command.ExecuteNonQuery();
+        using (var connection = new SqliteConnection(_connectionString))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"CREATE TABLE IF NOT EXISTS Henkilot (id INTEGER PRIMARY KEY, Nimi TEXT, Puhelin INTEGER);";
+            command.ExecuteNonQuery();
 
-        command.CommandText = @"CREATE TABLE IF NOT EXISTS Lemmikit (id INTEGER PRIMARY KEY, Nimi TEXT, Rotu TEXT, OmistajaID INTEGER, FOREIGN KEY(OmistajaID) REFERENCES Henkilot(id));";
-        command.ExecuteNonQuery();
+            command.CommandText = @"CREATE TABLE IF NOT EXISTS Lemmikit (id INTEGER PRIMARY KEY, Nimi TEXT, Rotu TEXT, OmistajaID INTEGER, FOREIGN KEY(OmistajaID) REFERENCES Henkilot(id));";
+            command.ExecuteNonQuery();
+        }
     }
 
     public void LisaaHenkilo(string nimi, int puhelin)
     {
-        var connection = new SqliteConnection(_connectionString);
-        connection.Open();
-        var command = connection.CreateCommand();
-        command.CommandText = @"INSERT INTO Henkilot (Nimi, Puhelin) VALUES ($nimi, $puhelin);";
-        command.Parameters.AddWithValue("$nimi", nimi);
-        command.Parameters.AddWithValue("$puhelin", puhelin);
-        command.ExecuteNonQuery();
+        using (var connection = new SqliteConnection(_connectionString))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"INSERT INTO Henkilot (Nimi, Puhelin) VALUES ($nimi, $puhelin);";
+            command.Parameters.AddWithValue("$nimi", nimi);
+            command.Parameters.AddWithValue("$puhelin", puhelin);
+            command.ExecuteNonQuery();
+        }
     }
 
     public void LisaaLemmikki(string nimi, string rotu, int omistajaID)
@@ -39,6 +43,40 @@ public class Taulut
         command.Parameters.AddWithValue("$rotu", rotu);
         command.Parameters.AddWithValue("$omistajaID", omistajaID);
         command.ExecuteNonQuery();
+    }
+
+
+    public void PaivitaHenkilonPuhelin(string nimi, int vanhaPuhelin, int uusiPuhelin)
+    {
+        using (var connection = new SqliteConnection(_connectionString))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"UPDATE Henkilot SET Puhelin = $uusiPuhelin WHERE Nimi = $nimi AND Puhelin = $vanhaPuhelin;";
+            command.Parameters.AddWithValue("$uusiPuhelin", uusiPuhelin);
+            command.Parameters.AddWithValue("$nimi", nimi);
+            command.Parameters.AddWithValue("$vanhaPuhelin", vanhaPuhelin);
+            command.ExecuteNonQuery();
+        }
+    }
+
+    public void NaytaPuhelin(string lemmikinNimi)
+    {
+        using (var connection = new SqliteConnection(_connectionString))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"SELECT H.Puhelin FROM Henkilot H JOIN Lemmikit L ON H.id = L.OmistajaID WHERE L.Nimi = $lemmikinNimi;";
+            command.Parameters.AddWithValue("$lemmikinNimi", lemmikinNimi);
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int puhelin = reader.GetInt32(0);
+                    Console.WriteLine($"Lemmikin '{lemmikinNimi}' omistajan puhelinnumero on: {puhelin}");
+                }
+            }
+        }
     }
 
 }
