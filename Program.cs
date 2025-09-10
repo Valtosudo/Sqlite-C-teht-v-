@@ -1,5 +1,6 @@
 ﻿namespace Sqlite_C_teht_v_;
 
+using Microsoft.Data.Sqlite;
 class Program
 {
     static void Main(string[] args)
