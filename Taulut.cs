@@ -35,27 +35,28 @@ public class Taulut
 
     public void LisaaLemmikki(string nimi, string rotu, int omistajaID)
     {
-        var connection = new SqliteConnection(_connectionString);
-        connection.Open();
-        var command = connection.CreateCommand();
-        command.CommandText = @"INSERT INTO Lemmikit (Nimi, Rotu, OmistajaID) VALUES ($nimi, $rotu, $omistajaID);";
-        command.Parameters.AddWithValue("$nimi", nimi);
-        command.Parameters.AddWithValue("$rotu", rotu);
-        command.Parameters.AddWithValue("$omistajaID", omistajaID);
-        command.ExecuteNonQuery();
+        using (var connection = new SqliteConnection(_connectionString))
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"INSERT INTO Lemmikit (Nimi, Rotu, OmistajaID) VALUES ($nimi, $rotu, $omistajaID);";
+            command.Parameters.AddWithValue("$nimi", nimi);
+            command.Parameters.AddWithValue("$rotu", rotu);
+            command.Parameters.AddWithValue("$omistajaID", omistajaID);
+            command.ExecuteNonQuery();
+        }
     }
 
 
-    public void PaivitaHenkilonPuhelin(string nimi, int vanhaPuhelin, int uusiPuhelin)
+    public void PaivitaHenkilonPuhelin(string nimi, int uusiPuhelin)
     {
         using (var connection = new SqliteConnection(_connectionString))
         {
             connection.Open();
             var command = connection.CreateCommand();
-            command.CommandText = @"UPDATE Henkilot SET Puhelin = $uusiPuhelin WHERE Nimi = $nimi AND Puhelin = $vanhaPuhelin;";
+            command.CommandText = @"UPDATE Henkilot SET Puhelin = $uusiPuhelin WHERE Nimi = $nimi;";
             command.Parameters.AddWithValue("$uusiPuhelin", uusiPuhelin);
             command.Parameters.AddWithValue("$nimi", nimi);
-            command.Parameters.AddWithValue("$vanhaPuhelin", vanhaPuhelin);
             command.ExecuteNonQuery();
         }
     }

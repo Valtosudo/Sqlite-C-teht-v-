@@ -10,7 +10,7 @@ class Program
 
         while (true)
         {
-            Console.WriteLine("Haluatko lisätä henkilön (H), lemmikin (L), näytä puhelinnumero (N) vai lopettaa (X)?");
+            Console.WriteLine("Haluatko lisätä henkilön (H), lemmikin (L), päivittää puhelinnumeron (P), näytä puhelinnumero (N) vai lopettaa (X)?");
             string? input = Console.ReadLine();
             string vastaus = input.ToUpper();
 
@@ -25,27 +25,6 @@ class Program
 
                 Console.WriteLine("Henkilö lisätty onnistuneesti!");
 
-                while (true)
-                {
-                    Console.WriteLine("haluatko päivittää henkilön puhelin numeron? (K/E)");
-                    string? vastaus2 = Console.ReadLine().ToUpper();
-                    if (vastaus2 == "K")
-                    {
-                        Console.WriteLine("Anna henkilön uusi puhelin numero:");
-                        int uusiPuhelin = Convert.ToInt32(Console.ReadLine());
-                        taulut.PaivitaHenkilonPuhelin(nimi, puhelin, uusiPuhelin);
-                        Console.WriteLine("Henkilön puhelin numero päivitetty onnistuneesti!");
-                        break;
-                    }
-                    else if (vastaus2 == "E")
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
             }
             else if (vastaus == "L")
             {
@@ -60,6 +39,16 @@ class Program
 
                 Console.WriteLine("Lemmikki lisätty onnistuneesti!");
 
+            }
+            else if (vastaus == "P")
+            {
+                Console.WriteLine("Anna henkilön nimi:");
+                string? nimi = Console.ReadLine();
+                Console.WriteLine("Anna henkilön uusi puhelinnumero:");
+                int uusiPuhelin = Convert.ToInt32(Console.ReadLine());
+
+                taulut.PaivitaHenkilonPuhelin(nimi, uusiPuhelin);
+                Console.WriteLine("Henkilön puhelinnumero päivitetty onnistuneesti!");
             }
             else if (vastaus == "N")
             {
