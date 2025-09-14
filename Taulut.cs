@@ -19,7 +19,6 @@ public class Taulut
             command.ExecuteNonQuery();
         }
     }
-
     public void LisaaHenkilo(string nimi, int puhelin)
     {
         using (var connection = new SqliteConnection(_connectionString))
@@ -32,7 +31,6 @@ public class Taulut
             command.ExecuteNonQuery();
         }
     }
-
     public void LisaaLemmikki(string nimi, string rotu, int omistajaID)
     {
         using (var connection = new SqliteConnection(_connectionString))
@@ -46,8 +44,6 @@ public class Taulut
             command.ExecuteNonQuery();
         }
     }
-
-
     public void PaivitaHenkilonPuhelin(string nimi, int uusiPuhelin)
     {
         using (var connection = new SqliteConnection(_connectionString))
@@ -60,7 +56,6 @@ public class Taulut
             command.ExecuteNonQuery();
         }
     }
-
     public void NaytaPuhelin(string lemmikinNimi)
     {
         using (var connection = new SqliteConnection(_connectionString))
