@@ -33,9 +33,9 @@ class Program
                 Console.WriteLine("Anna lemmikin rotu:");
                 string? rotu = Console.ReadLine();
                 Console.WriteLine("Anna omistajan ID:");
-                int omistajaID = Convert.ToInt32(Console.ReadLine());
+                int omistajaNimi = Convert.ToInt32(Console.ReadLine());
 
-                taulut.LisaaLemmikki(nimi, rotu, omistajaID);
+                taulut.LisaaLemmikki(nimi, rotu, omistajaNimi);
 
                 Console.WriteLine("Lemmikki lisätty onnistuneesti!");
 

@@ -15,7 +15,7 @@ public class Taulut
             command.CommandText = @"CREATE TABLE IF NOT EXISTS Henkilot (id INTEGER PRIMARY KEY, Nimi TEXT, Puhelin INTEGER);";
             command.ExecuteNonQuery();
 
-            command.CommandText = @"CREATE TABLE IF NOT EXISTS Lemmikit (id INTEGER PRIMARY KEY, Nimi TEXT, Rotu TEXT, OmistajaID INTEGER, FOREIGN KEY(OmistajaID) REFERENCES Henkilot(id));";
+            command.CommandText = @"CREATE TABLE IF NOT EXISTS Lemmikit (id INTEGER PRIMARY KEY, Nimi TEXT, Rotu TEXT, OmistajaNimi TEXT, FOREIGN KEY(OmistajaNimi) REFERENCES Henkilot(Nimi));";
             command.ExecuteNonQuery();
         }
     }
@@ -31,16 +31,16 @@ public class Taulut
             command.ExecuteNonQuery();
         }
     }
-    public void LisaaLemmikki(string nimi, string rotu, int omistajaID)
+    public void LisaaLemmikki(string nimi, string rotu, int omistajaNimi)
     {
         using (var connection = new SqliteConnection(_connectionString))
         {
             connection.Open();
             var command = connection.CreateCommand();
-            command.CommandText = @"INSERT INTO Lemmikit (Nimi, Rotu, OmistajaID) VALUES ($nimi, $rotu, $omistajaID);";
+            command.CommandText = @"INSERT INTO Lemmikit (Nimi, Rotu, OmistajaNimi) VALUES ($nimi, $rotu, $omistajaNimi);";
             command.Parameters.AddWithValue("$nimi", nimi);
             command.Parameters.AddWithValue("$rotu", rotu);
-            command.Parameters.AddWithValue("$omistajaID", omistajaID);
+            command.Parameters.AddWithValue("$omistajaNimi", omistajaNimi);
             command.ExecuteNonQuery();
         }
     }
@@ -62,7 +62,7 @@ public class Taulut
         {
             connection.Open();
             var command = connection.CreateCommand();
-            command.CommandText = @"SELECT H.Puhelin FROM Henkilot H JOIN Lemmikit L ON H.id = L.OmistajaID WHERE L.Nimi = $lemmikinNimi;";
+            command.CommandText = @"SELECT H.Puhelin FROM Henkilot H JOIN Lemmikit L ON H.id = L.OmistajaNimi WHERE L.Nimi = $lemmikinNimi;";
             command.Parameters.AddWithValue("$lemmikinNimi", lemmikinNimi);
             using (var reader = command.ExecuteReader())
             {
